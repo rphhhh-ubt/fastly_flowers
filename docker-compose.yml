@@ -1,0 +1,32 @@
+services:
+  tgmgr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tgmgr:fast-module
+    container_name: tgmgr
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      TGMGR_LICENSE_PATH: /data/license.json
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./data:/data
+      - ./sessions:/app/sessions
+      - ./logs:/app/logs
+      - ./avatars:/app/avatars:ro
+      - ./channel_avatars:/app/channel_avatars:ro
+      - /etc/machine-id:/etc/machine-id:ro
+    security_opt:
+      - no-new-privileges:true
+
+
+
+
+
+
+
+
