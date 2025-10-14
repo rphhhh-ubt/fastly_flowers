@@ -1,9 +1,6 @@
 services:
   tgmgr:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: tgmgr:fast-module
+    image: ghcr.io/rphhhh-ubt/fastly_flowers:latest
     container_name: tgmgr
     restart: unless-stopped
     env_file:
