@@ -5,8 +5,6 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    environment:
-      TGMGR_LICENSE_PATH: /data/license.json
     read_only: true
     tmpfs:
       - /tmp
