@@ -12,7 +12,6 @@ from aiogram.types import BotCommand
 from handlers import register_all_handlers
 from config import BOT_TOKEN, ADMIN_IDS
 from app.db import DB_CONFIG  # проверяем, что конфиг БД подтянулся
-from app.lic_client import LicenseClient, LicenseError
 
 # ── Логирование ────────────────────────────────────────────────────────────────
 logging.getLogger("asyncio").setLevel(logging.CRITICAL)
@@ -30,16 +29,7 @@ async def on_startup(bot: Bot):
 # ── Основной async-вход ───────────────────────────────────────────────────────
 # ── Основной async-вход ───────────────────────────────────────────────────────
 async def main() -> None:
-    # 1) Лицензия
-    lic = LicenseClient()
-    try:
-        await lic.ensure_license()
-    except LicenseError as e:
-        log.error("License check failed: %s", e)
-        raise SystemExit(1)
-    #lic.spawn_auto_renew(asyncio.get_event_loop())
-
-    # 2) Бот/диспетчер
+    # 1) Бот/диспетчер
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher(fsm_strategy=FSMStrategy.CHAT)
 
