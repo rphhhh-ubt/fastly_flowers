@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict y9GQXw9JCD2ZFc8a0fzWbKpInWCoWyIv9ChvDlN2pyGAy85FR84534Vk7dPLFop
+\restrict 9AfJyueOGxEdQraEbwCCDUmRxBJgIlaN3bitKSiwgQeDGl8KJxgdQO3JgW8cgGv
 
 -- Dumped from database version 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1)
 -- Dumped by pg_dump version 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1)
@@ -18,6 +18,137 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+ALTER TABLE IF EXISTS ONLY public.twofa_task_logs DROP CONSTRAINT IF EXISTS twofa_task_logs_task_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.twofa_logs DROP CONSTRAINT IF EXISTS twofa_logs_task_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.tasks DROP CONSTRAINT IF EXISTS tasks_parent_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.tasks DROP CONSTRAINT IF EXISTS tasks_account_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.task_results DROP CONSTRAINT IF EXISTS task_results_task_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.task_del DROP CONSTRAINT IF EXISTS task_del_task_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.task_del DROP CONSTRAINT IF EXISTS task_del_account_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.task_logs DROP CONSTRAINT IF EXISTS fk_task;
+ALTER TABLE IF EXISTS ONLY public.comment_check_log DROP CONSTRAINT IF EXISTS comment_check_log_task_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.comment_check_log DROP CONSTRAINT IF EXISTS comment_check_log_account_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.channels DROP CONSTRAINT IF EXISTS channels_account_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.accounts DROP CONSTRAINT IF EXISTS accounts_group_id_fkey;
+ALTER TABLE IF EXISTS ONLY public.accounts DROP CONSTRAINT IF EXISTS accounts_api_key_id_fkey;
+DROP INDEX IF EXISTS public.idx_twofa_tasks_status;
+DROP INDEX IF EXISTS public.idx_twofa_task_logs_task_id;
+DROP INDEX IF EXISTS public.idx_twofa_logs_task_id;
+DROP INDEX IF EXISTS public.idx_task_logs_task_id;
+DROP INDEX IF EXISTS public.idx_like_logs_task;
+DROP INDEX IF EXISTS public.idx_like_logs_stat;
+DROP INDEX IF EXISTS public.idx_like_logs_acc;
+DROP INDEX IF EXISTS public.idx_like_log_task;
+DROP INDEX IF EXISTS public.idx_like_log_acc_msg;
+DROP INDEX IF EXISTS public.idx_comment_check_log_task_channel;
+DROP INDEX IF EXISTS public.idx_comment_check_log_task;
+DROP INDEX IF EXISTS public.idx_check_groups_log_task_id;
+DROP INDEX IF EXISTS public.idx_check_groups_log_account_id;
+ALTER TABLE IF EXISTS ONLY public.twofa_tasks DROP CONSTRAINT IF EXISTS twofa_tasks_pkey;
+ALTER TABLE IF EXISTS ONLY public.twofa_task_logs DROP CONSTRAINT IF EXISTS twofa_task_logs_pkey;
+ALTER TABLE IF EXISTS ONLY public.twofa_logs DROP CONSTRAINT IF EXISTS twofa_logs_pkey;
+ALTER TABLE IF EXISTS ONLY public.tasks DROP CONSTRAINT IF EXISTS tasks_pkey;
+ALTER TABLE IF EXISTS ONLY public.task_results DROP CONSTRAINT IF EXISTS task_results_pkey;
+ALTER TABLE IF EXISTS ONLY public.task_logs DROP CONSTRAINT IF EXISTS task_logs_pkey;
+ALTER TABLE IF EXISTS ONLY public.task_del DROP CONSTRAINT IF EXISTS task_del_pkey;
+ALTER TABLE IF EXISTS ONLY public.task_create DROP CONSTRAINT IF EXISTS task_create_pkey;
+ALTER TABLE IF EXISTS ONLY public.spambot_logs DROP CONSTRAINT IF EXISTS spambot_logs_pkey;
+ALTER TABLE IF EXISTS ONLY public.search_groups_results DROP CONSTRAINT IF EXISTS search_groups_results_pkey;
+ALTER TABLE IF EXISTS ONLY public.proxies DROP CONSTRAINT IF EXISTS proxies_pkey;
+ALTER TABLE IF EXISTS ONLY public.logs DROP CONSTRAINT IF EXISTS logs_pkey;
+ALTER TABLE IF EXISTS ONLY public.log_settings DROP CONSTRAINT IF EXISTS log_settings_pkey;
+ALTER TABLE IF EXISTS ONLY public.like_watch_state DROP CONSTRAINT IF EXISTS like_watch_state_task_id_account_id_channel_key;
+ALTER TABLE IF EXISTS ONLY public.like_watch_state DROP CONSTRAINT IF EXISTS like_watch_state_pkey;
+ALTER TABLE IF EXISTS ONLY public.like_reactions DROP CONSTRAINT IF EXISTS like_reactions_task_id_account_id_channel_username_post_id__key;
+ALTER TABLE IF EXISTS ONLY public.like_reactions DROP CONSTRAINT IF EXISTS like_reactions_pkey;
+ALTER TABLE IF EXISTS ONLY public.like_logs DROP CONSTRAINT IF EXISTS like_logs_pkey;
+ALTER TABLE IF EXISTS ONLY public.like_comments_log DROP CONSTRAINT IF EXISTS like_comments_log_pkey;
+ALTER TABLE IF EXISTS ONLY public.join_groups_log DROP CONSTRAINT IF EXISTS join_groups_log_pkey;
+ALTER TABLE IF EXISTS ONLY public.import_logs DROP CONSTRAINT IF EXISTS import_logs_pkey;
+ALTER TABLE IF EXISTS ONLY public.comment_check_log DROP CONSTRAINT IF EXISTS comment_check_log_pkey;
+ALTER TABLE IF EXISTS ONLY public.check_groups_log DROP CONSTRAINT IF EXISTS check_groups_log_pkey;
+ALTER TABLE IF EXISTS ONLY public.channels DROP CONSTRAINT IF EXISTS channels_pkey;
+ALTER TABLE IF EXISTS ONLY public.api_keys DROP CONSTRAINT IF EXISTS api_keys_pkey;
+ALTER TABLE IF EXISTS ONLY public.accounts DROP CONSTRAINT IF EXISTS accounts_pkey;
+ALTER TABLE IF EXISTS ONLY public.account_session_history DROP CONSTRAINT IF EXISTS account_session_history_pkey;
+ALTER TABLE IF EXISTS ONLY public.account_groups DROP CONSTRAINT IF EXISTS account_groups_pkey;
+ALTER TABLE IF EXISTS ONLY public.account_groups DROP CONSTRAINT IF EXISTS account_groups_name_key;
+ALTER TABLE IF EXISTS public.twofa_tasks ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.twofa_task_logs ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.twofa_logs ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.tasks ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.task_logs ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.task_del ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.task_create ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.spambot_logs ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.search_groups_results ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.proxies ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.logs ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.log_settings ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.like_watch_state ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.like_reactions ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.like_logs ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.like_comments_log ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.join_groups_log ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.import_logs ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.comment_check_log ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.check_groups_log ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.channels ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.api_keys ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.accounts ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.account_session_history ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS public.account_groups ALTER COLUMN id DROP DEFAULT;
+DROP SEQUENCE IF EXISTS public.twofa_tasks_id_seq;
+DROP TABLE IF EXISTS public.twofa_tasks;
+DROP SEQUENCE IF EXISTS public.twofa_task_logs_id_seq;
+DROP TABLE IF EXISTS public.twofa_task_logs;
+DROP SEQUENCE IF EXISTS public.twofa_logs_id_seq;
+DROP TABLE IF EXISTS public.twofa_logs;
+DROP SEQUENCE IF EXISTS public.tasks_id_seq;
+DROP TABLE IF EXISTS public.tasks;
+DROP TABLE IF EXISTS public.task_results;
+DROP SEQUENCE IF EXISTS public.task_logs_id_seq;
+DROP TABLE IF EXISTS public.task_logs;
+DROP SEQUENCE IF EXISTS public.task_del_id_seq;
+DROP TABLE IF EXISTS public.task_del;
+DROP SEQUENCE IF EXISTS public.task_create_id_seq;
+DROP TABLE IF EXISTS public.task_create;
+DROP SEQUENCE IF EXISTS public.spambot_logs_id_seq;
+DROP TABLE IF EXISTS public.spambot_logs;
+DROP SEQUENCE IF EXISTS public.search_groups_results_id_seq;
+DROP TABLE IF EXISTS public.search_groups_results;
+DROP SEQUENCE IF EXISTS public.proxies_id_seq;
+DROP TABLE IF EXISTS public.proxies;
+DROP SEQUENCE IF EXISTS public.logs_id_seq;
+DROP TABLE IF EXISTS public.logs;
+DROP SEQUENCE IF EXISTS public.log_settings_id_seq;
+DROP TABLE IF EXISTS public.log_settings;
+DROP SEQUENCE IF EXISTS public.like_watch_state_id_seq;
+DROP TABLE IF EXISTS public.like_watch_state;
+DROP SEQUENCE IF EXISTS public.like_reactions_id_seq;
+DROP TABLE IF EXISTS public.like_reactions;
+DROP SEQUENCE IF EXISTS public.like_logs_id_seq;
+DROP TABLE IF EXISTS public.like_logs;
+DROP SEQUENCE IF EXISTS public.like_comments_log_id_seq;
+DROP TABLE IF EXISTS public.like_comments_log;
+DROP SEQUENCE IF EXISTS public.join_groups_log_id_seq;
+DROP TABLE IF EXISTS public.join_groups_log;
+DROP SEQUENCE IF EXISTS public.import_logs_id_seq;
+DROP TABLE IF EXISTS public.import_logs;
+DROP SEQUENCE IF EXISTS public.comment_check_log_id_seq;
+DROP TABLE IF EXISTS public.comment_check_log;
+DROP SEQUENCE IF EXISTS public.check_groups_log_id_seq;
+DROP TABLE IF EXISTS public.check_groups_log;
+DROP SEQUENCE IF EXISTS public.channels_id_seq;
+DROP TABLE IF EXISTS public.channels;
+DROP SEQUENCE IF EXISTS public.api_keys_id_seq;
+DROP TABLE IF EXISTS public.api_keys;
+DROP SEQUENCE IF EXISTS public.accounts_id_seq;
+DROP TABLE IF EXISTS public.accounts;
+DROP SEQUENCE IF EXISTS public.account_session_history_id_seq;
+DROP TABLE IF EXISTS public.account_session_history;
+DROP SEQUENCE IF EXISTS public.account_groups_id_seq;
+DROP TABLE IF EXISTS public.account_groups;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -34,7 +165,7 @@ CREATE TABLE public.account_groups (
 );
 
 
-ALTER TABLE public.account_groups OWNER TO postgres;
+ALTER TABLE public.account_groups OWNER TO tguser;
 
 --
 -- Name: account_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -49,7 +180,7 @@ CREATE SEQUENCE public.account_groups_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.account_groups_id_seq OWNER TO postgres;
+ALTER TABLE public.account_groups_id_seq OWNER TO tguser;
 
 --
 -- Name: account_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -70,7 +201,7 @@ CREATE TABLE public.account_session_history (
 );
 
 
-ALTER TABLE public.account_session_history OWNER TO postgres;
+ALTER TABLE public.account_session_history OWNER TO tguser;
 
 --
 -- Name: account_session_history_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -85,7 +216,7 @@ CREATE SEQUENCE public.account_session_history_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.account_session_history_id_seq OWNER TO postgres;
+ALTER TABLE public.account_session_history_id_seq OWNER TO tguser;
 
 --
 -- Name: account_session_history_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -129,7 +260,7 @@ CREATE TABLE public.accounts (
 );
 
 
-ALTER TABLE public.accounts OWNER TO postgres;
+ALTER TABLE public.accounts OWNER TO tguser;
 
 --
 -- Name: accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -144,7 +275,7 @@ CREATE SEQUENCE public.accounts_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.accounts_id_seq OWNER TO postgres;
+ALTER TABLE public.accounts_id_seq OWNER TO tguser;
 
 --
 -- Name: accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -168,7 +299,7 @@ CREATE TABLE public.api_keys (
 );
 
 
-ALTER TABLE public.api_keys OWNER TO postgres;
+ALTER TABLE public.api_keys OWNER TO tguser;
 
 --
 -- Name: api_keys_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -183,7 +314,7 @@ CREATE SEQUENCE public.api_keys_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.api_keys_id_seq OWNER TO postgres;
+ALTER TABLE public.api_keys_id_seq OWNER TO tguser;
 
 --
 -- Name: api_keys_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -208,7 +339,7 @@ CREATE TABLE public.channels (
 );
 
 
-ALTER TABLE public.channels OWNER TO postgres;
+ALTER TABLE public.channels OWNER TO tguser;
 
 --
 -- Name: channels_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -223,7 +354,7 @@ CREATE SEQUENCE public.channels_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.channels_id_seq OWNER TO postgres;
+ALTER TABLE public.channels_id_seq OWNER TO tguser;
 
 --
 -- Name: channels_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -249,7 +380,7 @@ CREATE TABLE public.check_groups_log (
 );
 
 
-ALTER TABLE public.check_groups_log OWNER TO postgres;
+ALTER TABLE public.check_groups_log OWNER TO tguser;
 
 --
 -- Name: check_groups_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -264,13 +395,52 @@ CREATE SEQUENCE public.check_groups_log_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.check_groups_log_id_seq OWNER TO postgres;
+ALTER TABLE public.check_groups_log_id_seq OWNER TO tguser;
 
 --
 -- Name: check_groups_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.check_groups_log_id_seq OWNED BY public.check_groups_log.id;
+
+
+--
+-- Name: comment_check_log; Type: TABLE; Schema: public; Owner: tguser
+--
+
+CREATE TABLE public.comment_check_log (
+    id bigint NOT NULL,
+    task_id bigint NOT NULL,
+    account_id bigint,
+    channel text NOT NULL,
+    can_comment boolean,
+    mode text,
+    message text,
+    checked_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.comment_check_log OWNER TO tguser;
+
+--
+-- Name: comment_check_log_id_seq; Type: SEQUENCE; Schema: public; Owner: tguser
+--
+
+CREATE SEQUENCE public.comment_check_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.comment_check_log_id_seq OWNER TO tguser;
+
+--
+-- Name: comment_check_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tguser
+--
+
+ALTER SEQUENCE public.comment_check_log_id_seq OWNED BY public.comment_check_log.id;
 
 
 --
@@ -285,7 +455,7 @@ CREATE TABLE public.import_logs (
 );
 
 
-ALTER TABLE public.import_logs OWNER TO postgres;
+ALTER TABLE public.import_logs OWNER TO tguser;
 
 --
 -- Name: import_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -300,7 +470,7 @@ CREATE SEQUENCE public.import_logs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.import_logs_id_seq OWNER TO postgres;
+ALTER TABLE public.import_logs_id_seq OWNER TO tguser;
 
 --
 -- Name: import_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -324,7 +494,7 @@ CREATE TABLE public.join_groups_log (
 );
 
 
-ALTER TABLE public.join_groups_log OWNER TO postgres;
+ALTER TABLE public.join_groups_log OWNER TO tguser;
 
 --
 -- Name: join_groups_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -339,7 +509,7 @@ CREATE SEQUENCE public.join_groups_log_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.join_groups_log_id_seq OWNER TO postgres;
+ALTER TABLE public.join_groups_log_id_seq OWNER TO tguser;
 
 --
 -- Name: join_groups_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -366,7 +536,7 @@ CREATE TABLE public.like_comments_log (
 );
 
 
-ALTER TABLE public.like_comments_log OWNER TO postgres;
+ALTER TABLE public.like_comments_log OWNER TO tguser;
 
 --
 -- Name: like_comments_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -381,7 +551,7 @@ CREATE SEQUENCE public.like_comments_log_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.like_comments_log_id_seq OWNER TO postgres;
+ALTER TABLE public.like_comments_log_id_seq OWNER TO tguser;
 
 --
 -- Name: like_comments_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -408,7 +578,7 @@ CREATE TABLE public.like_logs (
 );
 
 
-ALTER TABLE public.like_logs OWNER TO postgres;
+ALTER TABLE public.like_logs OWNER TO tguser;
 
 --
 -- Name: like_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -422,7 +592,7 @@ CREATE SEQUENCE public.like_logs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.like_logs_id_seq OWNER TO postgres;
+ALTER TABLE public.like_logs_id_seq OWNER TO tguser;
 
 --
 -- Name: like_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -446,7 +616,7 @@ CREATE TABLE public.like_reactions (
 );
 
 
-ALTER TABLE public.like_reactions OWNER TO postgres;
+ALTER TABLE public.like_reactions OWNER TO tguser;
 
 --
 -- Name: like_reactions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -461,7 +631,7 @@ CREATE SEQUENCE public.like_reactions_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.like_reactions_id_seq OWNER TO postgres;
+ALTER TABLE public.like_reactions_id_seq OWNER TO tguser;
 
 --
 -- Name: like_reactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -484,7 +654,7 @@ CREATE TABLE public.like_watch_state (
 );
 
 
-ALTER TABLE public.like_watch_state OWNER TO postgres;
+ALTER TABLE public.like_watch_state OWNER TO tguser;
 
 --
 -- Name: like_watch_state_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -499,7 +669,7 @@ CREATE SEQUENCE public.like_watch_state_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.like_watch_state_id_seq OWNER TO postgres;
+ALTER TABLE public.like_watch_state_id_seq OWNER TO tguser;
 
 --
 -- Name: like_watch_state_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -519,7 +689,7 @@ CREATE TABLE public.log_settings (
 );
 
 
-ALTER TABLE public.log_settings OWNER TO postgres;
+ALTER TABLE public.log_settings OWNER TO tguser;
 
 --
 -- Name: log_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -534,7 +704,7 @@ CREATE SEQUENCE public.log_settings_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.log_settings_id_seq OWNER TO postgres;
+ALTER TABLE public.log_settings_id_seq OWNER TO tguser;
 
 --
 -- Name: log_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -558,7 +728,7 @@ CREATE TABLE public.logs (
 );
 
 
-ALTER TABLE public.logs OWNER TO postgres;
+ALTER TABLE public.logs OWNER TO tguser;
 
 --
 -- Name: logs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -573,7 +743,7 @@ CREATE SEQUENCE public.logs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.logs_id_seq OWNER TO postgres;
+ALTER TABLE public.logs_id_seq OWNER TO tguser;
 
 --
 -- Name: logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -597,7 +767,7 @@ CREATE TABLE public.proxies (
 );
 
 
-ALTER TABLE public.proxies OWNER TO postgres;
+ALTER TABLE public.proxies OWNER TO tguser;
 
 --
 -- Name: proxies_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -612,7 +782,7 @@ CREATE SEQUENCE public.proxies_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.proxies_id_seq OWNER TO postgres;
+ALTER TABLE public.proxies_id_seq OWNER TO tguser;
 
 --
 -- Name: proxies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -639,7 +809,7 @@ CREATE TABLE public.search_groups_results (
 );
 
 
-ALTER TABLE public.search_groups_results OWNER TO postgres;
+ALTER TABLE public.search_groups_results OWNER TO tguser;
 
 --
 -- Name: search_groups_results_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -654,7 +824,7 @@ CREATE SEQUENCE public.search_groups_results_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.search_groups_results_id_seq OWNER TO postgres;
+ALTER TABLE public.search_groups_results_id_seq OWNER TO tguser;
 
 --
 -- Name: search_groups_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -676,7 +846,7 @@ CREATE TABLE public.spambot_logs (
 );
 
 
-ALTER TABLE public.spambot_logs OWNER TO postgres;
+ALTER TABLE public.spambot_logs OWNER TO tguser;
 
 --
 -- Name: spambot_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -691,7 +861,7 @@ CREATE SEQUENCE public.spambot_logs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.spambot_logs_id_seq OWNER TO postgres;
+ALTER TABLE public.spambot_logs_id_seq OWNER TO tguser;
 
 --
 -- Name: spambot_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -713,7 +883,7 @@ CREATE TABLE public.task_create (
 );
 
 
-ALTER TABLE public.task_create OWNER TO postgres;
+ALTER TABLE public.task_create OWNER TO tguser;
 
 --
 -- Name: task_create_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -728,7 +898,7 @@ CREATE SEQUENCE public.task_create_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.task_create_id_seq OWNER TO postgres;
+ALTER TABLE public.task_create_id_seq OWNER TO tguser;
 
 --
 -- Name: task_create_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -750,7 +920,7 @@ CREATE TABLE public.task_del (
 );
 
 
-ALTER TABLE public.task_del OWNER TO postgres;
+ALTER TABLE public.task_del OWNER TO tguser;
 
 --
 -- Name: task_del_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -765,7 +935,7 @@ CREATE SEQUENCE public.task_del_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.task_del_id_seq OWNER TO postgres;
+ALTER TABLE public.task_del_id_seq OWNER TO tguser;
 
 --
 -- Name: task_del_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -790,7 +960,7 @@ CREATE TABLE public.task_logs (
 );
 
 
-ALTER TABLE public.task_logs OWNER TO postgres;
+ALTER TABLE public.task_logs OWNER TO tguser;
 
 --
 -- Name: task_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -805,7 +975,7 @@ CREATE SEQUENCE public.task_logs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.task_logs_id_seq OWNER TO postgres;
+ALTER TABLE public.task_logs_id_seq OWNER TO tguser;
 
 --
 -- Name: task_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -824,7 +994,7 @@ CREATE TABLE public.task_results (
 );
 
 
-ALTER TABLE public.task_results OWNER TO postgres;
+ALTER TABLE public.task_results OWNER TO tguser;
 
 --
 -- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
@@ -851,7 +1021,7 @@ CREATE TABLE public.tasks (
 );
 
 
-ALTER TABLE public.tasks OWNER TO postgres;
+ALTER TABLE public.tasks OWNER TO tguser;
 
 --
 -- Name: tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -866,7 +1036,7 @@ CREATE SEQUENCE public.tasks_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.tasks_id_seq OWNER TO postgres;
+ALTER TABLE public.tasks_id_seq OWNER TO tguser;
 
 --
 -- Name: tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -891,7 +1061,7 @@ CREATE TABLE public.twofa_logs (
 );
 
 
-ALTER TABLE public.twofa_logs OWNER TO postgres;
+ALTER TABLE public.twofa_logs OWNER TO tguser;
 
 --
 -- Name: twofa_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -906,7 +1076,7 @@ CREATE SEQUENCE public.twofa_logs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.twofa_logs_id_seq OWNER TO postgres;
+ALTER TABLE public.twofa_logs_id_seq OWNER TO tguser;
 
 --
 -- Name: twofa_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -931,7 +1101,7 @@ CREATE TABLE public.twofa_task_logs (
 );
 
 
-ALTER TABLE public.twofa_task_logs OWNER TO postgres;
+ALTER TABLE public.twofa_task_logs OWNER TO tguser;
 
 --
 -- Name: twofa_task_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -946,7 +1116,7 @@ CREATE SEQUENCE public.twofa_task_logs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.twofa_task_logs_id_seq OWNER TO postgres;
+ALTER TABLE public.twofa_task_logs_id_seq OWNER TO tguser;
 
 --
 -- Name: twofa_task_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -974,7 +1144,7 @@ CREATE TABLE public.twofa_tasks (
 );
 
 
-ALTER TABLE public.twofa_tasks OWNER TO postgres;
+ALTER TABLE public.twofa_tasks OWNER TO tguser;
 
 --
 -- Name: twofa_tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -989,7 +1159,7 @@ CREATE SEQUENCE public.twofa_tasks_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.twofa_tasks_id_seq OWNER TO postgres;
+ALTER TABLE public.twofa_tasks_id_seq OWNER TO tguser;
 
 --
 -- Name: twofa_tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -1038,6 +1208,13 @@ ALTER TABLE ONLY public.channels ALTER COLUMN id SET DEFAULT nextval('public.cha
 --
 
 ALTER TABLE ONLY public.check_groups_log ALTER COLUMN id SET DEFAULT nextval('public.check_groups_log_id_seq'::regclass);
+
+
+--
+-- Name: comment_check_log id; Type: DEFAULT; Schema: public; Owner: tguser
+--
+
+ALTER TABLE ONLY public.comment_check_log ALTER COLUMN id SET DEFAULT nextval('public.comment_check_log_id_seq'::regclass);
 
 
 --
@@ -1223,6 +1400,14 @@ ALTER TABLE ONLY public.check_groups_log
 
 
 --
+-- Name: comment_check_log comment_check_log_pkey; Type: CONSTRAINT; Schema: public; Owner: tguser
+--
+
+ALTER TABLE ONLY public.comment_check_log
+    ADD CONSTRAINT comment_check_log_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: import_logs import_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1405,6 +1590,20 @@ CREATE INDEX idx_check_groups_log_task_id ON public.check_groups_log USING btree
 
 
 --
+-- Name: idx_comment_check_log_task; Type: INDEX; Schema: public; Owner: tguser
+--
+
+CREATE INDEX idx_comment_check_log_task ON public.comment_check_log USING btree (task_id);
+
+
+--
+-- Name: idx_comment_check_log_task_channel; Type: INDEX; Schema: public; Owner: tguser
+--
+
+CREATE INDEX idx_comment_check_log_task_channel ON public.comment_check_log USING btree (task_id, channel);
+
+
+--
 -- Name: idx_like_log_acc_msg; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1489,6 +1688,22 @@ ALTER TABLE ONLY public.accounts
 
 ALTER TABLE ONLY public.channels
     ADD CONSTRAINT channels_account_id_fkey FOREIGN KEY (account_id) REFERENCES public.accounts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: comment_check_log comment_check_log_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tguser
+--
+
+ALTER TABLE ONLY public.comment_check_log
+    ADD CONSTRAINT comment_check_log_account_id_fkey FOREIGN KEY (account_id) REFERENCES public.accounts(id) ON DELETE SET NULL;
+
+
+--
+-- Name: comment_check_log comment_check_log_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tguser
+--
+
+ALTER TABLE ONLY public.comment_check_log
+    ADD CONSTRAINT comment_check_log_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(id) ON DELETE CASCADE;
 
 
 --
@@ -1909,19 +2124,19 @@ GRANT ALL ON SEQUENCE public.twofa_tasks_id_seq TO tguser;
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES  TO tguser;
+ALTER DEFAULT PRIVILEGES FOR ROLE tguser IN SCHEMA public GRANT ALL ON SEQUENCES  TO tguser;
 
 
 --
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT SELECT,INSERT,DELETE,UPDATE ON TABLES  TO tguser;
+ALTER DEFAULT PRIVILEGES FOR ROLE tguser IN SCHEMA public GRANT SELECT,INSERT,DELETE,UPDATE ON TABLES  TO tguser;
 
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict y9GQXw9JCD2ZFc8a0fzWbKpInWCoWyIv9ChvDlN2pyGAy85FR84534Vk7dPLFop
+\unrestrict 9AfJyueOGxEdQraEbwCCDUmRxBJgIlaN3bitKSiwgQeDGl8KJxgdQO3JgW8cgGv
 
