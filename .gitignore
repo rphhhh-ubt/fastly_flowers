@@ -213,3 +213,8 @@ __marimo__/
 
 avatar_uploads/
 logs/
+avatar_uploads/*
+!avatar_uploads/.gitkeep
+
+logs/*
+!logs/.gitkeep
