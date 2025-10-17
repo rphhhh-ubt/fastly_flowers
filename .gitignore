@@ -210,3 +210,6 @@ __marimo__/
 .env
 .env.local
 >>>>>>> 304bea0 (Initial commit: add bot sources and Dockerfile)
+
+avatar_uploads/
+logs/
